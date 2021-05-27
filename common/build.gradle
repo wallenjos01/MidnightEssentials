@@ -1,0 +1,40 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+repositories {
+
+    maven {
+        url 'https://mdmc.ddns.net/maven/'
+    }
+
+}
+
+dependencies {
+
+    compile("me.m1dnightninja.midnightcore:api:1.0-latest")
+    compile("me.m1dnightninja.midnightcore:common:1.0-latest")
+
+}
+
+
+artifacts {
+    jar
+    sourcesJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            version = project.ext.publicationVersion
+            artifacts {
+                jar
+                sourcesJar
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
