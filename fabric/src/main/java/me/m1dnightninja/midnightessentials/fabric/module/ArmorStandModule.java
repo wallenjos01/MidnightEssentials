@@ -1,7 +1,7 @@
 package me.m1dnightninja.midnightessentials.fabric.module;
 
-import me.m1dnightninja.midnightcore.fabric.api.event.PlayerInteractEntityEvent;
 import me.m1dnightninja.midnightcore.fabric.event.Event;
+import me.m1dnightninja.midnightcore.fabric.event.PlayerInteractEntityEvent;
 import me.m1dnightninja.midnightessentials.common.module.AbstractArmorStandModule;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;

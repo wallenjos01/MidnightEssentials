@@ -1,17 +1,18 @@
 package me.m1dnightninja.midnightessentials.fabric.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.m1dnightninja.midnightcore.fabric.api.PermissionHelper;
+import me.m1dnightninja.midnightcore.api.module.lang.CustomPlaceholderInline;
+import me.m1dnightninja.midnightcore.fabric.util.PermissionUtil;
+import me.m1dnightninja.midnightcore.fabric.module.lang.LangModule;
+import me.m1dnightninja.midnightessentials.api.MidnightEssentialsAPI;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +25,7 @@ public class LaunchEntityCommand {
     public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(Commands.literal("launchentity")
-            .requires(stack -> PermissionHelper.checkOrOp(stack, "midnightessentials.launchentity", 2))
+            .requires(stack -> PermissionUtil.checkOrOp(stack, "midnightessentials.command.launchentity", 2))
             .then(Commands.argument("target", EntityArgument.entities())
                 .then(Commands.argument("velocity", Vec3Argument.vec3(false))
                     .executes(context -> execute(context, context.getArgument("target", EntitySelector.class), context.getArgument("velocity", Coordinates.class), null))
@@ -75,7 +76,7 @@ public class LaunchEntityCommand {
             }
         }
 
-        context.getSource().sendSuccess(new TextComponent("Launched " + targets.size() + (targets.size() == 1 ? " entity" : " entities")), true);
+        LangModule.sendCommandSuccess(context, MidnightEssentialsAPI.getInstance().getLangProvider(), true, "command.launchentity.success", new CustomPlaceholderInline("count", targets.size()+""));
 
         return targets.size();
 

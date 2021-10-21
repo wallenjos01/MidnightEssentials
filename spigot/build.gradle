@@ -21,13 +21,15 @@ repositories {
 
 configurations {
     shade
-    compile.extendsFrom(shade)
+    compileOnly.extendsFrom(shade)
 }
 
 dependencies {
 
     compileOnly("org.spigotmc:spigot:${project.ext.minecraftVersion}-R0.1-SNAPSHOT")
+    //compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
 
+    compileOnly("me.m1dnightninja.midnightcore:api:1.0-latest")
     compileOnly("me.m1dnightninja.midnightcore:spigot:1.0-latest")
 
     shade(project(':api'))
@@ -44,13 +46,8 @@ processResources {
     ex.put("modname", project.ext.modname)
     ex.put("modclass", project.ext.modclass)
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "plugin.yml"
+    filesMatching("plugin.yml") {
         expand(ex)
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        include "plugin.yml"
     }
 }
 
@@ -74,17 +71,26 @@ artifacts {
 }
 
 publishing {
+
     publications {
         mavenJava(MavenPublication) {
+
             version = project.ext.publicationVersion
-            artifacts {
-                jar
-                sourcesJar
-            }
+
+            artifact(jar)
+            artifact(sourcesJar)
         }
     }
 
     repositories {
-        mavenLocal()
+        maven {
+            if (project.hasProperty("pubUrl")) {
+                url = project.pubUrl as String
+                credentials {
+                    username project.pubUser as String
+                    password project.pubPass as String
+                }
+            }
+        }
     }
 }

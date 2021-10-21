@@ -1,6 +1,6 @@
 package me.m1dnightninja.midnightessentials.spigot;
 
-import me.m1dnightninja.midnightcore.spigot.api.event.MidnightCoreLoadModulesEvent;
+import me.m1dnightninja.midnightcore.spigot.event.MidnightCoreLoadModulesEvent;
 import me.m1dnightninja.midnightessentials.spigot.module.ArmorStandModule;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

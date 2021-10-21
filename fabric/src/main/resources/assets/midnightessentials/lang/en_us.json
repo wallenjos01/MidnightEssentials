@@ -1,0 +1,7 @@
+{
+  "command.spawn.success": "&bTeleporting...",
+  "command.spawn.success.other": "&bTeleported &f%count% &bentities",
+  "command.setspawn.success": "&bSpawn location changed",
+  "command.launchentity.success": "&fLaunched %count% entities",
+  "command.damage.success": "&fDamaged %count% entities"
+}

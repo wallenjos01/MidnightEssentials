@@ -1,0 +1,7 @@
+{
+  "command.spawn.success": "&bTeletransportadando...",
+  "command.spawn.success.other": "&bTeletransportadas &f%count% &bentidades",
+  "command.setspawn.success": "&bEl punto de reaparición fue modificado",
+  "command.launchentity.success": "&fLanzado %count% entidades",
+  "command.damage.success": "&fDañé %count% entidades"
+}

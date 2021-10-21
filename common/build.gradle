@@ -4,6 +4,7 @@ plugins {
 
 repositories {
 
+    mavenLocal()
     maven {
         url 'https://mdmc.ddns.net/maven/'
     }
@@ -12,8 +13,10 @@ repositories {
 
 dependencies {
 
-    compile("me.m1dnightninja.midnightcore:api:1.0-latest")
-    compile("me.m1dnightninja.midnightcore:common:1.0-latest")
+    compileOnly(project(":api"))
+
+    compileOnly("me.m1dnightninja.midnightcore:api:1.0-latest")
+    compileOnly("me.m1dnightninja.midnightcore:common:1.0-latest")
 
 }
 
@@ -24,17 +27,26 @@ artifacts {
 }
 
 publishing {
+
     publications {
         mavenJava(MavenPublication) {
+
             version = project.ext.publicationVersion
-            artifacts {
-                jar
-                sourcesJar
-            }
+
+            artifact(jar)
+            artifact(sourcesJar)
         }
     }
 
     repositories {
-        mavenLocal()
+        maven {
+            if (project.hasProperty("pubUrl")) {
+                url = project.pubUrl as String
+                credentials {
+                    username project.pubUser as String
+                    password project.pubPass as String
+                }
+            }
+        }
     }
 }
