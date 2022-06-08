@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.m1dnightninja.midnightessentials.fabric.mixin",
+  "package": "org.wallentines.midnightessentials.fabric.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AccessorSignEntity"
