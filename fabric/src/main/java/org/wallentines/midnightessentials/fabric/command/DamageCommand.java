@@ -23,7 +23,7 @@ public class DamageCommand {
 
     private static final HashMap<String, DamageSource> allSources = new HashMap<>();
 
-    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(Commands.literal("damage")
             .requires(Permissions.require("midnightessentials.command.damage", 2))
@@ -39,7 +39,7 @@ public class DamageCommand {
         );
     }
 
-    private int executeDamage(CommandContext<CommandSourceStack> context, List<? extends Entity> entities, float amount, String damageSource) {
+    private static int executeDamage(CommandContext<CommandSourceStack> context, List<? extends Entity> entities, float amount, String damageSource) {
 
         DamageSource src = DamageSource.GENERIC;
 

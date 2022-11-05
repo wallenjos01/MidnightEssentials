@@ -2,6 +2,8 @@
   "command.spawn.success": "&bTeleporting...",
   "command.spawn.success.other": "&bTeleported &f%count% &bentities",
   "command.setspawn.success": "&bSpawn location changed",
+  "command.warp.success": "&bTeleporting...",
+  "command.setwarp.success": "&bWarp &f%warp_id% updated",
   "command.launchentity.success": "&fLaunched %count% entities",
   "command.sit.success": "&fCaused %count% entities to sit",
   "command.damage.success": "&fDamaged %count% entities",
@@ -14,5 +16,6 @@
   "waypoint.locked": "That waypoint is locked",
   "waypoint.registered": "Waypoint %name% registered",
   "waypoint.registered.new": "New Waypoint registered",
-  "waypoint.current": "&a∙ You are here"
+  "waypoint.current": "&a∙ You are here",
+  "gui.warps.title": "Warps"
 }

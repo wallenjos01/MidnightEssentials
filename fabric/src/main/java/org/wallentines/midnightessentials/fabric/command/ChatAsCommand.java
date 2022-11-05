@@ -8,7 +8,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.server.level.ServerPlayer;
 import org.wallentines.midnightcore.fabric.player.FabricPlayer;
 
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class ChatAsCommand {
 
-    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(
             Commands.literal("chatas")
@@ -30,7 +29,7 @@ public class ChatAsCommand {
 
     }
 
-    private int execute(CommandContext<CommandSourceStack> context, List<ServerPlayer> players, String message) {
+    private static int execute(CommandContext<CommandSourceStack> context, List<ServerPlayer> players, String message) {
 
         for(ServerPlayer pl : players) {
 

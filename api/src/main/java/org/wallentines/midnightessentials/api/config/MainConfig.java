@@ -2,6 +2,9 @@ package org.wallentines.midnightessentials.api.config;
 
 import org.wallentines.midnightcore.api.item.MItemStack;
 import org.wallentines.midnightcore.api.player.Location;
+import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
+import org.wallentines.midnightessentials.api.StringRegistry;
+import org.wallentines.midnightessentials.api.Warp;
 import org.wallentines.midnightlib.config.ConfigRegistry;
 import org.wallentines.midnightlib.config.ConfigSection;
 import org.wallentines.midnightlib.config.FileConfig;
@@ -20,6 +23,8 @@ public class MainConfig {
     private boolean disableJoinLeaveMessages;
 
     private final HashMap<Integer, MItemStack> firstJoinItems = new HashMap<>();
+
+    private final StringRegistry<Warp> warpRegistry = new StringRegistry<>();
 
     public MainConfig(ConfigSection defaults, FileConfig config) {
         this.config = config;
@@ -82,11 +87,16 @@ public class MainConfig {
         return firstJoinItems;
     }
 
+    public StringRegistry<Warp> getWarpRegistry() {
+        return warpRegistry;
+    }
+
     private void loadConfig() {
 
         config.getRoot().fill(defaults);
         config.save();
 
+        warpRegistry.clear();
         firstJoinItems.clear();
 
         if(config.getRoot().has("spawn")) {
@@ -100,14 +110,31 @@ public class MainConfig {
 
         disableJoinLeaveMessages = config.getRoot().getBoolean("disable_join_messages", false);
 
-        if(!config.getRoot().has("first_join_items")) return;
-        for(ConfigSection sec : config.getRoot().getListFiltered("first_join_items", ConfigSection.class)) {
+        if(config.getRoot().has("first_join_items")) {
+            for (ConfigSection sec : config.getRoot().getListFiltered("first_join_items", ConfigSection.class)) {
 
-            MItemStack mis = ConfigRegistry.INSTANCE.getSerializer(MItemStack.class, ConfigRegistry.Direction.DESERIALIZE).deserialize(sec);
-            int slot = sec.getOrDefault("slot", -1, Integer.class);
+                MItemStack mis = ConfigRegistry.INSTANCE.getSerializer(MItemStack.class, ConfigRegistry.Direction.DESERIALIZE).deserialize(sec);
+                int slot = sec.getOrDefault("slot", -1, Integer.class);
 
-            firstJoinItems.put(slot, mis);
+                firstJoinItems.put(slot, mis);
+            }
         }
+
+        if(config.getRoot().has("warps")) {
+
+            ConfigSection warps = config.getRoot().getSection("warps");
+            for(String key : warps.getKeys()) {
+                try {
+                    Warp warp = Warp.SERIALIZER.deserialize(warps.getSection(key));
+                    warpRegistry.register(key, warp);
+
+                } catch (Exception ex) {
+                    MidnightEssentialsAPI.getLogger().warn("An error occurred while parsing a Warp!");
+                    ex.printStackTrace();
+                }
+            }
+        }
+
 
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 public class LaunchEntityCommand {
 
-    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(Commands.literal("launchentity")
             .requires(Permissions.require("midnightessentials.command.launchentity", 2))
@@ -38,7 +38,7 @@ public class LaunchEntityCommand {
 
     }
 
-    private int execute(CommandContext<CommandSourceStack> context, EntitySelector selector, Coordinates coords, Entity origin) throws CommandSyntaxException {
+    private static int execute(CommandContext<CommandSourceStack> context, EntitySelector selector, Coordinates coords, Entity origin) throws CommandSyntaxException {
 
         try {
             List<? extends Entity> targets = selector.findEntities(context.getSource());

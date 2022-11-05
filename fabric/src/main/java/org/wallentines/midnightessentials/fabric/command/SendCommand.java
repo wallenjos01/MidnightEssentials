@@ -20,7 +20,7 @@ public class SendCommand {
 
     private static final Identifier SEND_ID = new Identifier("midnightcore", "send");
 
-    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
         dispatcher.register(Commands.literal("send")
             .requires(Permissions.require("midnightessentials.command.send", 4))
@@ -33,7 +33,7 @@ public class SendCommand {
 
     }
 
-    private int execute(CommandContext<CommandSourceStack> context, EntitySelector selector, String server) throws CommandSyntaxException {
+    private static int execute(CommandContext<CommandSourceStack> context, EntitySelector selector, String server) throws CommandSyntaxException {
 
         MessagingModule module = MidnightCoreAPI.getInstance().getModuleManager().getModule(MessagingModule.class);
 

@@ -46,7 +46,6 @@ import org.wallentines.midnightcore.fabric.item.FabricItem;
 import org.wallentines.midnightcore.fabric.player.FabricPlayer;
 import org.wallentines.midnightcore.fabric.util.ConversionUtil;
 import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
-import org.wallentines.midnightlib.config.ConfigRegistry;
 import org.wallentines.midnightlib.config.ConfigSection;
 import org.wallentines.midnightlib.config.FileConfig;
 import org.wallentines.midnightlib.config.serialization.ConfigSerializer;
@@ -526,12 +525,12 @@ public class FabricWaypointModule implements Module<MidnightCoreAPI> {
         }
 
         public static final ConfigSerializer<WaypointData> SERIALIZER = ConfigSerializer.create(
-            ConfigSerializer.<UUID, WaypointData>entry(ConfigRegistry.UUID_SERIALIZER, "owner", wd -> wd.owner).orDefault(null),
-            ConfigSerializer.entry(Vec3i.SERIALIZER, "location", wd -> wd.location),
-            ConfigSerializer.entry(MComponent.SERIALIZER, "name", wd -> wd.name),
-            ConfigSerializer.<UUID, WaypointData>entry(ConfigRegistry.UUID_SERIALIZER, "entity_id", wd -> wd.entityId).orDefault(null),
-            ConfigSerializer.<MItemStack, WaypointData>entry(MItemStack.SERIALIZER, "item", wd -> wd.display).orDefault(new FabricItem(new ItemStack(Items.GRASS_BLOCK))),
-            ConfigSerializer.<Boolean, WaypointData>entry(PrimitiveSerializers.BOOLEAN, "locked", wd -> wd.locked).orDefault(false),
+            PrimitiveSerializers.UUID.<WaypointData>entry("owner", wd -> wd.owner).orDefault(null),
+            Vec3i.SERIALIZER.entry("location", wd -> wd.location),
+            MComponent.INLINE_SERIALIZER.entry("name", wd -> wd.name),
+            PrimitiveSerializers.UUID.<WaypointData>entry("entity_id", wd -> wd.entityId).orDefault(null),
+            MItemStack.SERIALIZER.<WaypointData>entry("item", wd -> wd.display).orDefault(new FabricItem(new ItemStack(Items.GRASS_BLOCK))),
+            PrimitiveSerializers.BOOLEAN.<WaypointData>entry("locked", wd -> wd.locked).orDefault(false),
             WaypointData::new
         );
     }

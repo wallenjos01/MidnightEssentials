@@ -8,7 +8,6 @@ import org.wallentines.midnightcore.api.MidnightCoreAPI;
 import org.wallentines.midnightcore.fabric.event.MidnightCoreAPICreatedEvent;
 import org.wallentines.midnightcore.fabric.event.MidnightCoreLoadModulesEvent;
 import org.wallentines.midnightcore.fabric.event.server.CommandLoadEvent;
-import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
 import org.wallentines.midnightessentials.fabric.listener.PlayerListener;
 import org.wallentines.midnightlib.config.ConfigProvider;
 import org.wallentines.midnightlib.config.ConfigSection;
@@ -25,11 +24,12 @@ public class MidnightEssentials implements ModInitializer {
         MidnightEssentialsImpl api = new MidnightEssentialsImpl(new File("config/MidnightEssentials"), new ConfigSection());
 
         Event.register(CommandLoadEvent.class, this, event -> {
-            new LaunchEntityCommand().register(event.getDispatcher());
-            new SendCommand().register(event.getDispatcher());
-            new SpawnCommand().register(event.getDispatcher());
-            new ChatAsCommand().register(event.getDispatcher());
-            new DamageCommand().register(event.getDispatcher());
+            LaunchEntityCommand.register(event.getDispatcher());
+            SendCommand.register(event.getDispatcher());
+            SpawnCommand.register(event.getDispatcher());
+            ChatAsCommand.register(event.getDispatcher());
+            DamageCommand.register(event.getDispatcher());
+            WarpCommand.register(event.getDispatcher());
             SitCommand.register(event.getDispatcher());
         });
 
