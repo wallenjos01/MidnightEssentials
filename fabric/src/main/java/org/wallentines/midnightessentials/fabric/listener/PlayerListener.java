@@ -7,6 +7,7 @@ import org.wallentines.midnightcore.fabric.event.player.PlayerJoinEvent;
 import org.wallentines.midnightcore.fabric.event.player.PlayerLeaveEvent;
 import org.wallentines.midnightcore.fabric.player.FabricPlayer;
 import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
+import org.wallentines.midnightessentials.common.MidnightEssentialsImpl;
 import org.wallentines.midnightlib.config.ConfigSection;
 import org.wallentines.midnightlib.event.Event;
 
@@ -27,7 +28,7 @@ public class PlayerListener {
         ConfigSection sec = mod.getGlobalProvider().getData(fp).getOrCreateSection("midnightessentials");
         if(!sec.getBoolean("joined")) {
 
-            MidnightEssentialsAPI.getInstance().onFirstJoin(fp);
+            ((MidnightEssentialsImpl) MidnightEssentialsAPI.getInstance()).onFirstJoin(fp);
             sec.set("joined", true);
 
             mod.getGlobalProvider().saveData(fp);
@@ -36,7 +37,7 @@ public class PlayerListener {
         if(MidnightEssentialsAPI.getInstance().getConfig().shouldDisableJoinLeaveMessages()) {
             event.setJoinMessage((Component) null);
         }
-        MidnightEssentialsAPI.getInstance().onJoin(fp);
+        ((MidnightEssentialsImpl) MidnightEssentialsAPI.getInstance()).onJoin(fp);
 
     }
 
