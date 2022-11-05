@@ -4,6 +4,7 @@ import org.wallentines.midnightcore.api.MidnightCoreAPI;
 import org.wallentines.midnightcore.api.player.MPlayer;
 import org.wallentines.midnightlib.math.Vec3i;
 import org.wallentines.midnightlib.module.Module;
+import org.wallentines.midnightlib.registry.Identifier;
 
 public interface BlockCommandModule extends Module<MidnightCoreAPI> {
 
@@ -14,5 +15,7 @@ public interface BlockCommandModule extends Module<MidnightCoreAPI> {
 
     void unloadRegistry(String id);
     BlockCommandRegistry getRegistry(String id);
+
+    BlockCommandRegistry findRegistry(Identifier worldId);
 
 }

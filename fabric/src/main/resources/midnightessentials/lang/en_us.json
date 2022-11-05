@@ -3,5 +3,16 @@
   "command.spawn.success.other": "&bTeleported &f%count% &bentities",
   "command.setspawn.success": "&bSpawn location changed",
   "command.launchentity.success": "&fLaunched %count% entities",
-  "command.damage.success": "&fDamaged %count% entities"
+  "command.sit.success": "&fCaused %count% entities to sit",
+  "command.damage.success": "&fDamaged %count% entities",
+  "command.blockcommand.add": "&fAdded command to block",
+  "command.blockcommand.remove": "&fRemoved command from block",
+  "command.blockcommand.list": "&fCommands on block %block%:",
+  "command.blockcommand.clear": "&fRemoved all commands from block",
+  "command.blockcommand.error": "&cThere was no block command registry found in this world!",
+  "waypoint.teleport.obstructed": "&cThat waypoint is obstructed!",
+  "waypoint.locked": "That waypoint is locked",
+  "waypoint.registered": "Waypoint %name% registered",
+  "waypoint.registered.new": "New Waypoint registered",
+  "waypoint.current": "&a∙ You are here"
 }

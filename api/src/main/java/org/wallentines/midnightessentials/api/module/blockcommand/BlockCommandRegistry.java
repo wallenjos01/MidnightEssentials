@@ -27,21 +27,39 @@ public class BlockCommandRegistry {
             data.commands.add(cmd);
             return data;
         });
-
     }
+
+    public void removeCommand(Vec3i block, int i) {
+
+        BlockData dt = commands.get(block);
+        if(dt == null) return;
+
+        dt.commands.remove(i);
+    }
+
+    public Collection<BlockCommand> getCommands(Vec3i block) {
+
+        BlockData dt = commands.get(block);
+        if(dt == null) return new ArrayList<>();
+
+        return dt.commands;
+    }
+
 
     public boolean executeCommands(MPlayer player, InteractionType type, Vec3i block) {
 
         BlockData data = commands.get(block);
-        if(data == null) {
+        if(data == null || data.commands.isEmpty()) {
             return false;
         }
 
+        int count = 0;
         for(BlockCommand cmd : data.commands) {
-            cmd.execute(player, type);
+
+            if(cmd.execute(player, type)) count++;
         }
 
-        return !data.passthrough;
+        return count > 0 && !data.passthrough;
     }
 
     public void loadFromConfig(ConfigSection sec) {
@@ -60,6 +78,13 @@ public class BlockCommandRegistry {
         commands.clear();
     }
 
+    public void clear(Vec3i block) {
+
+        BlockData dt = commands.get(block);
+        if(dt == null) return;
+
+        dt.commands.clear();
+    }
 
     public Identifier getActiveWorld() {
         return activeWorld;
@@ -151,12 +176,16 @@ public class BlockCommandRegistry {
             requirements.add(req);
         }
 
-        public void execute(MPlayer clicker, InteractionType type) {
+        public String getCommand() {
+            return command;
+        }
 
-            if (!actuation.contains(type)) return;
+        public boolean execute(MPlayer clicker, InteractionType type) {
+
+            if (!actuation.contains(type)) return false;
 
             for (Requirement<MPlayer> req : requirements) {
-                if (!req.check(clicker)) return;
+                if (!req.check(clicker)) return false;
             }
 
             LangModule mod = MidnightCoreAPI.getInstance().getModuleManager().getModule(LangModule.class);
@@ -169,6 +198,8 @@ public class BlockCommandRegistry {
                 case TITLE -> clicker.sendTitle(mod.applyPlaceholders(MComponent.parse(command), clicker), 20, 80, 20);
                 case SUBTITLE -> clicker.sendSubtitle(mod.applyPlaceholders(MComponent.parse(command), clicker), 20, 80, 20);
             }
+
+            return true;
         }
 
         public static final ConfigSerializer<BlockCommand> SERIALIZER = new ConfigSerializer<>() {

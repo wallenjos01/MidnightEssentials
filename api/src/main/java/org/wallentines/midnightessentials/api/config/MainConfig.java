@@ -103,7 +103,7 @@ public class MainConfig {
         if(!config.getRoot().has("first_join_items")) return;
         for(ConfigSection sec : config.getRoot().getListFiltered("first_join_items", ConfigSection.class)) {
 
-            MItemStack mis = ConfigRegistry.INSTANCE.getSerializer(MItemStack.class).deserialize(sec);
+            MItemStack mis = ConfigRegistry.INSTANCE.getSerializer(MItemStack.class, ConfigRegistry.Direction.DESERIALIZE).deserialize(sec);
             int slot = sec.getOrDefault("slot", -1, Integer.class);
 
             firstJoinItems.put(slot, mis);

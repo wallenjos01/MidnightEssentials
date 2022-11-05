@@ -34,6 +34,8 @@ public abstract class AbstractBlockCommandModule implements BlockCommandModule {
 
         ConfigRegistry.INSTANCE.registerSerializer(BlockCommandRegistry.BlockCommand.class, BlockCommandRegistry.BlockCommand.SERIALIZER);
 
+
+
         registerListeners();
         return true;
     }
@@ -55,6 +57,9 @@ public abstract class AbstractBlockCommandModule implements BlockCommandModule {
             config.reload();
         }
 
+        config.getRoot().fill(new ConfigSection().with("minecraft:overworld", new ConfigSection()));
+        config.save();
+
         for(String s : config.getRoot().getKeys()) {
 
             BlockCommandRegistry reg = createRegistry(s);
@@ -65,11 +70,25 @@ public abstract class AbstractBlockCommandModule implements BlockCommandModule {
 
     @Override
     public boolean execute(Vec3i loc, BlockCommandRegistry.InteractionType type, MPlayer player) {
+
+        BlockCommandRegistry reg = findRegistry(player.getLocation().getWorldId());
+        if(reg == null) return false;
+
+        return reg.executeCommands(player, type, loc);
+    }
+
+    @Override
+    public BlockCommandRegistry getRegistry(String id) {
+        return registries.get(id);
+    }
+
+    @Override
+    public BlockCommandRegistry findRegistry(Identifier worldId) {
         for(BlockCommandRegistry reg : registries.values()) {
 
-            if(reg.getActiveWorld().equals(player.getLocation().getWorldId())) return reg.executeCommands(player, type, loc);
+            if(reg.getActiveWorld().equals(worldId)) return reg;
         }
-        return false;
+        return null;
     }
 
     @Override
