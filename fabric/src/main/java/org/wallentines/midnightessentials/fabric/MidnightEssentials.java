@@ -9,8 +9,10 @@ import org.wallentines.midnightcore.fabric.event.MidnightCoreAPICreatedEvent;
 import org.wallentines.midnightcore.fabric.event.MidnightCoreLoadModulesEvent;
 import org.wallentines.midnightcore.fabric.event.server.CommandLoadEvent;
 import org.wallentines.midnightessentials.fabric.listener.PlayerListener;
+import org.wallentines.midnightessentials.fabric.module.hologram.FabricHologramModule;
 import org.wallentines.midnightlib.config.ConfigProvider;
 import org.wallentines.midnightlib.config.ConfigSection;
+import org.wallentines.midnightlib.config.FileConfig;
 import org.wallentines.midnightlib.config.serialization.json.JsonConfigProvider;
 import org.wallentines.midnightlib.event.Event;
 
@@ -40,6 +42,7 @@ public class MidnightEssentials implements ModInitializer {
             event.getModuleRegistry().register(FabricSignEditModule.ID, FabricSignEditModule.MODULE_INFO);
             event.getModuleRegistry().register(FabricAutoElytraModule.ID, FabricAutoElytraModule.MODULE_INFO);
             event.getModuleRegistry().register(FabricWaypointModule.ID, FabricWaypointModule.MODULE_INFO);
+            event.getModuleRegistry().register(FabricHologramModule.ID, FabricHologramModule.MODULE_INFO);
 
         });
 
@@ -47,18 +50,25 @@ public class MidnightEssentials implements ModInitializer {
 
             ConfigProvider prov = JsonConfigProvider.INSTANCE;
             ConfigSection lang = prov.loadFromStream(getClass().getResourceAsStream("/midnightessentials/lang/en_us.json"));
-            ConfigSection esp = prov.loadFromStream(getClass().getResourceAsStream("/midnightessentials/lang/es_us.json"));
 
             api.initialize(event.getAPI(), lang);
-            api.getLangProvider().loadEntries(esp, "es_us");
 
-            if(MidnightCoreAPI.getInstance().getModuleManager().isModuleLoaded(FabricBlockCommandModule.ID)) {
-                MidnightCoreAPI.getInstance().getModuleManager().getModule(FabricBlockCommandModule.class).reloadDefaultRegistry();
+            // Load Spanish Entries
+            ConfigSection esp = prov.loadFromStream(getClass().getResourceAsStream("/midnightessentials/lang/es_mx.json"));
+            FileConfig es = FileConfig.findFile(api.getLangProvider().getFolder().listFiles(), "es_mx");
+            if(es == null) {
+                es = FileConfig.fromFile(new File(api.getLangProvider().getFolder(), "es_mx.json"));
+                es.getRoot().fill(esp);
+                es.save();
+            }
+
+            if(event.getAPI().getModuleManager().isModuleLoaded(FabricBlockCommandModule.ID)) {
+                event.getAPI().getModuleManager().getModule(FabricBlockCommandModule.class).reloadDefaultRegistry();
             }
 
         });
 
-        new PlayerListener().registerEvents();
+        PlayerListener.registerEvents();
 
     }
 }

@@ -3,7 +3,7 @@ package org.wallentines.midnightessentials.api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.wallentines.midnightcore.api.module.data.DataProvider;
-import org.wallentines.midnightcore.api.module.lang.LangProvider;
+import org.wallentines.midnightcore.api.text.LangProvider;
 import org.wallentines.midnightessentials.api.config.MainConfig;
 
 import java.io.File;

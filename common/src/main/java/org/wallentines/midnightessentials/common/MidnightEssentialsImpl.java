@@ -4,10 +4,9 @@ import org.wallentines.midnightcore.api.MidnightCoreAPI;
 import org.wallentines.midnightcore.api.item.MItemStack;
 import org.wallentines.midnightcore.api.module.data.DataModule;
 import org.wallentines.midnightcore.api.module.data.DataProvider;
-import org.wallentines.midnightcore.api.module.lang.LangModule;
-import org.wallentines.midnightcore.api.module.lang.LangProvider;
 import org.wallentines.midnightcore.api.player.Location;
 import org.wallentines.midnightcore.api.player.MPlayer;
+import org.wallentines.midnightcore.api.text.LangProvider;
 import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
 import org.wallentines.midnightessentials.api.config.MainConfig;
 import org.wallentines.midnightlib.config.ConfigSection;
@@ -51,11 +50,10 @@ public class MidnightEssentialsImpl extends MidnightEssentialsAPI {
 
     public void initialize(MidnightCoreAPI api, ConfigSection langDefaults) {
 
-        LangModule mod = api.getModuleManager().getModule(LangModule.class);
         DataModule dMod = api.getModuleManager().getModule(DataModule.class);
 
         File langFolder = new File(dataFolder, "lang");
-        langProvider = mod.createProvider(langFolder.toPath(), langDefaults);
+        langProvider = new LangProvider(langFolder.toPath(), langDefaults);
         dataProvider = dMod.getOrCreateProvider(dataFolder.toPath().resolve("data"));
     }
 

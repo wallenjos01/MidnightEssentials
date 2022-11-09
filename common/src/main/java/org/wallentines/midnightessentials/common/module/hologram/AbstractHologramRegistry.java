@@ -1,70 +1,84 @@
 package org.wallentines.midnightessentials.common.module.hologram;
 
-import org.wallentines.midnightcore.api.player.Location;
-import org.wallentines.midnightcore.api.text.MComponent;
+import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
 import org.wallentines.midnightessentials.api.module.hologram.Hologram;
 import org.wallentines.midnightessentials.api.module.hologram.HologramRegistry;
 import org.wallentines.midnightlib.config.ConfigSection;
+import org.wallentines.midnightlib.registry.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractHologramRegistry implements HologramRegistry {
 
-    protected final Set<Hologram> loaded = new HashSet<>();
+    protected final HashMap<String, Hologram> loaded = new HashMap<>();
     protected final AbstractHologramModule module;
+    protected final Identifier worldId;
 
-    public AbstractHologramRegistry(AbstractHologramModule module) {
+    public AbstractHologramRegistry(AbstractHologramModule module, Identifier worldId) {
         this.module = module;
-
-        module.registerHologramParser("text", c -> TextHologram.load(this, c));
-        module.registerHologramParser("lang", c -> LangHologram.load(this, c));
-
+        this.worldId = worldId;
     }
 
     @Override
-    public Hologram createHologram(List<MComponent> components, Location location) {
-        return new TextHologram(this, location, components);
-    }
-
-    @Override
-    public void addHologram(Hologram hologram) {
-        loaded.add(hologram);
-        doLoad(hologram);
+    public void addHologram(String id, Hologram hologram) {
+        onLoad(id, hologram);
+        loaded.put(id, hologram);
     }
 
     @Override
     public void loadFromConfig(ConfigSection config) {
 
-        for(ConfigSection sec : config.getListFiltered("holograms", ConfigSection.class)) {
-            addHologram(module.parseHologram(sec));
+        for(String key : config.getKeys()) {
+            try {
+                ConfigSection sec = config.getSection(key);
+                addHologram(key, HologramImpl.SERIALIZER.deserialize(sec));
+            } catch (Exception ex) {
+                MidnightEssentialsAPI.getLogger().warn("An error occurred while parsing a Hologram!");
+                ex.printStackTrace();
+            }
         }
     }
 
     @Override
     public ConfigSection saveToConfig() {
 
-        List<ConfigSection> serialized = new ArrayList<>();
-        loaded.forEach(hg -> serialized.add(hg.save()));
+        ConfigSection out = new ConfigSection();
+        for(Map.Entry<String, Hologram> hg : loaded.entrySet()) {
+            out.set(hg.getKey(), HologramImpl.SERIALIZER.serialize(hg.getValue()));
+        }
 
-        return new ConfigSection().with("holograms", serialized);
+        return out;
     }
 
     @Override
-    public void unloadHologram(Hologram hologram) {
+    public void unloadHologram(String key) {
 
-        loaded.remove(hologram);
-        doUnload(hologram);
+        Hologram hg = loaded.remove(key);
+        onUnload(key, hg);
     }
 
     @Override
     public void unloadAll() {
 
-        loaded.forEach(Hologram::unload);
+        for(Map.Entry<String, Hologram> hg : loaded.entrySet()) {
+            onUnload(hg.getKey(), hg.getValue());
+        }
+        loaded.clear();
     }
 
-    protected abstract void doLoad(Hologram hologram);
-    protected abstract void doUnload(Hologram hologram);
+    @Override
+    public Collection<String> getHologramIds() {
+        return loaded.keySet();
+    }
+
+    @Override
+    public Hologram getHologram(String id) {
+        return loaded.get(id);
+    }
+
+    protected abstract void onLoad(String key, Hologram hologram);
+    protected abstract void onUnload(String key, Hologram hologram);
+
 }

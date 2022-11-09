@@ -13,14 +13,14 @@ import org.wallentines.midnightlib.event.Event;
 
 public class PlayerListener {
 
-    public void registerEvents() {
+    public static void registerEvents() {
 
-        Event.register(PlayerJoinEvent.class, this, this::onJoin);
-        Event.register(PlayerLeaveEvent.class, this, this::onLeave);
+        Event.register(PlayerJoinEvent.class, PlayerListener.class, PlayerListener::onJoin);
+        Event.register(PlayerLeaveEvent.class, PlayerListener.class, PlayerListener::onLeave);
 
     }
 
-    private void onJoin(PlayerJoinEvent event) {
+    private static void onJoin(PlayerJoinEvent event) {
 
         DataModule mod = MidnightCoreAPI.getInstance().getModuleManager().getModule(DataModule.class);
 
@@ -41,7 +41,7 @@ public class PlayerListener {
 
     }
 
-    private void onLeave(PlayerLeaveEvent event) {
+    private static void onLeave(PlayerLeaveEvent event) {
         if(MidnightEssentialsAPI.getInstance().getConfig().shouldDisableJoinLeaveMessages()) {
             event.setLeaveMessage(null);
         }

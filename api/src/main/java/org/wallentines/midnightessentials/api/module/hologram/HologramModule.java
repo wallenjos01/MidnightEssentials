@@ -1,17 +1,11 @@
 package org.wallentines.midnightessentials.api.module.hologram;
 
-import org.wallentines.midnightlib.config.ConfigSection;
+import org.wallentines.midnightcore.api.MidnightCoreAPI;
+import org.wallentines.midnightlib.module.Module;
+import org.wallentines.midnightlib.registry.Identifier;
 
-import java.util.function.Function;
+public interface HologramModule extends Module<MidnightCoreAPI> {
 
-public interface HologramModule {
-
-    HologramRegistry getGlobalRegistry();
-
-    HologramRegistry createRegistry();
-
-    void registerHologramParser(String key, Function<ConfigSection, Hologram> func);
-
-    Hologram parseHologram(ConfigSection section);
+    HologramRegistry getHologramRegistry(Identifier world);
 
 }

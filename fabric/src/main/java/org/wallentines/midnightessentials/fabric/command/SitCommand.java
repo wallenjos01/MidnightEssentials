@@ -8,7 +8,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -16,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import org.wallentines.midnightcore.api.module.lang.CustomPlaceholderInline;
 import org.wallentines.midnightcore.fabric.event.entity.EntityDismountVehicleEvent;
 import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
+import org.wallentines.midnightessentials.fabric.util.ArmorStandUtil;
 import org.wallentines.midnightlib.event.Event;
 
 import java.util.*;
@@ -88,19 +88,7 @@ public class SitCommand {
 
             float rot = Objects.requireNonNullElse(rotation, ent.getYRot());
 
-            ArmorStand armorStand = new ArmorStand(ent.getLevel(), loc.x(), loc.y(), loc.z());
-
-            CompoundTag data = new CompoundTag();
-            armorStand.save(data);
-
-            data.putBoolean("Invulnerable", true);
-            data.putBoolean("NoGravity", true);
-            data.putBoolean("Invisible", true);
-            data.putBoolean("Marker", true);
-
-            UUID u = armorStand.getUUID();
-            armorStand.load(data);
-            armorStand.setUUID(u);
+            ArmorStand armorStand = ArmorStandUtil.createInvisibleArmorStand(ent.getLevel(), loc.x, loc.y, loc.z);
             armorStand.setYHeadRot(rot);
             armorStand.setYRot(rot);
 
