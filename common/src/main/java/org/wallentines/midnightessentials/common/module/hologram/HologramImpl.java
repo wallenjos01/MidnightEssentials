@@ -1,9 +1,9 @@
 package org.wallentines.midnightessentials.common.module.hologram;
 
-import org.wallentines.midnightcore.api.module.lang.LangModule;
-import org.wallentines.midnightcore.api.module.lang.LangProvider;
 import org.wallentines.midnightcore.api.player.MPlayer;
+import org.wallentines.midnightcore.api.text.LangProvider;
 import org.wallentines.midnightcore.api.text.MComponent;
+import org.wallentines.midnightcore.api.text.PlaceholderManager;
 import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
 import org.wallentines.midnightessentials.api.module.hologram.Hologram;
 import org.wallentines.midnightlib.config.serialization.ConfigSerializer;
@@ -33,11 +33,10 @@ public class HologramImpl implements Hologram {
     public List<MComponent> getMessage(MPlayer player) {
 
         LangProvider provider = MidnightEssentialsAPI.getInstance().getLangProvider();
-        LangModule mod = provider.getModule();
 
         List<MComponent> out = new ArrayList<>();
         for(String line : lines) {
-            out.add(mod.parseText(line, player, this, provider));
+            out.add(PlaceholderManager.INSTANCE.parseText(line, player, this, provider));
         }
 
         return out;

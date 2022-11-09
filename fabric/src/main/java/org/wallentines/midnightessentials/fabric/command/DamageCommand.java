@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import org.wallentines.midnightcore.api.module.lang.CustomPlaceholderInline;
+import org.wallentines.midnightcore.api.text.CustomPlaceholderInline;
 import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

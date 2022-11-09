@@ -1,9 +1,9 @@
 package org.wallentines.midnightessentials.api.module.blockcommand;
 
 import org.wallentines.midnightcore.api.MidnightCoreAPI;
-import org.wallentines.midnightcore.api.module.lang.LangModule;
 import org.wallentines.midnightcore.api.player.MPlayer;
 import org.wallentines.midnightcore.api.text.MComponent;
+import org.wallentines.midnightcore.api.text.PlaceholderManager;
 import org.wallentines.midnightlib.config.ConfigSection;
 import org.wallentines.midnightlib.config.serialization.ConfigSerializer;
 import org.wallentines.midnightlib.math.Vec3i;
@@ -188,15 +188,13 @@ public class BlockCommandRegistry {
                 if (!req.check(clicker)) return false;
             }
 
-            LangModule mod = MidnightCoreAPI.getInstance().getModuleManager().getModule(LangModule.class);
-
             switch (commandType) {
-                case PLAYER_COMMAND -> clicker.executeCommand(mod.parseText(command, clicker).getAllContent());
-                case CONSOLE_COMMAND -> MidnightCoreAPI.getInstance().executeConsoleCommand(mod.parseText(command, clicker).getAllContent());
-                case MESSAGE -> clicker.sendMessage(mod.applyPlaceholders(MComponent.parse(command), clicker));
-                case ACTION_BAR -> clicker.sendActionBar(mod.applyPlaceholders(MComponent.parse(command), clicker));
-                case TITLE -> clicker.sendTitle(mod.applyPlaceholders(MComponent.parse(command), clicker), 20, 80, 20);
-                case SUBTITLE -> clicker.sendSubtitle(mod.applyPlaceholders(MComponent.parse(command), clicker), 20, 80, 20);
+                case PLAYER_COMMAND -> clicker.executeCommand(PlaceholderManager.INSTANCE.parseText(command, clicker).getAllContent());
+                case CONSOLE_COMMAND -> MidnightCoreAPI.getInstance().executeConsoleCommand(PlaceholderManager.INSTANCE.parseText(command, clicker).getAllContent());
+                case MESSAGE -> clicker.sendMessage(PlaceholderManager.INSTANCE.applyPlaceholders(MComponent.parse(command), clicker));
+                case ACTION_BAR -> clicker.sendActionBar(PlaceholderManager.INSTANCE.applyPlaceholders(MComponent.parse(command), clicker));
+                case TITLE -> clicker.sendTitle(PlaceholderManager.INSTANCE.applyPlaceholders(MComponent.parse(command), clicker), 20, 80, 20);
+                case SUBTITLE -> clicker.sendSubtitle(PlaceholderManager.INSTANCE.applyPlaceholders(MComponent.parse(command), clicker), 20, 80, 20);
             }
 
             return true;
