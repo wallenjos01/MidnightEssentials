@@ -14,6 +14,7 @@ import org.wallentines.midnightcore.api.MidnightCoreAPI;
 import org.wallentines.midnightcore.fabric.event.player.PlayerInteractEntityEvent;
 import org.wallentines.midnightlib.config.ConfigSection;
 import org.wallentines.midnightlib.event.Event;
+import org.wallentines.midnightlib.module.Module;
 import org.wallentines.midnightlib.module.ModuleInfo;
 
 public class FabricArmorStandModule extends AbstractArmorStandModule {
@@ -51,6 +52,6 @@ public class FabricArmorStandModule extends AbstractArmorStandModule {
 
     }
 
-    public static final ModuleInfo<MidnightCoreAPI> MODULE_INFO = new ModuleInfo<>(FabricArmorStandModule::new, ID, new ConfigSection());
+    public static final ModuleInfo<MidnightCoreAPI, Module<MidnightCoreAPI>> MODULE_INFO = new ModuleInfo<>(FabricArmorStandModule::new, ID, new ConfigSection());
 
 }

@@ -26,9 +26,6 @@ public abstract class AbstractBlockCommandModule implements BlockCommandModule {
     @Override
     public boolean initialize(ConfigSection configuration, MidnightCoreAPI api) {
 
-        if(configuration.getBoolean("register_command")) {
-            registerCommands();
-        }
 
         fileName = configuration.getString("file_name");
 
@@ -96,7 +93,6 @@ public abstract class AbstractBlockCommandModule implements BlockCommandModule {
         registries.remove(id);
     }
 
-    protected abstract void registerCommands();
     protected abstract void registerListeners();
 
 }

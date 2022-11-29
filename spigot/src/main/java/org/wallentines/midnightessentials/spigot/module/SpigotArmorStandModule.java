@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.wallentines.midnightcore.api.MidnightCoreAPI;
 import org.wallentines.midnightlib.config.ConfigSection;
+import org.wallentines.midnightlib.module.Module;
 import org.wallentines.midnightlib.module.ModuleInfo;
 
 public class SpigotArmorStandModule extends AbstractArmorStandModule implements Listener {
@@ -40,5 +41,5 @@ public class SpigotArmorStandModule extends AbstractArmorStandModule implements 
         event.setCancelled(true);
     }
 
-    public static final ModuleInfo<MidnightCoreAPI> MODULE_INFO = new ModuleInfo<>(SpigotArmorStandModule::new, ID, new ConfigSection());
+    public static final ModuleInfo<MidnightCoreAPI, Module<MidnightCoreAPI>> MODULE_INFO = new ModuleInfo<>(SpigotArmorStandModule::new, ID, new ConfigSection());
 }

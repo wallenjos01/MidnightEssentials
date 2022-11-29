@@ -1,18 +1,16 @@
 package org.wallentines.midnightessentials.fabric;
 
+import org.wallentines.midnightcore.api.Registries;
+import org.wallentines.midnightcore.api.text.LangRegistry;
 import org.wallentines.midnightessentials.common.MidnightEssentialsImpl;
 import org.wallentines.midnightessentials.fabric.command.*;
 import org.wallentines.midnightessentials.fabric.module.*;
 import net.fabricmc.api.ModInitializer;
-import org.wallentines.midnightcore.api.MidnightCoreAPI;
-import org.wallentines.midnightcore.fabric.event.MidnightCoreAPICreatedEvent;
-import org.wallentines.midnightcore.fabric.event.MidnightCoreLoadModulesEvent;
 import org.wallentines.midnightcore.fabric.event.server.CommandLoadEvent;
 import org.wallentines.midnightessentials.fabric.listener.PlayerListener;
 import org.wallentines.midnightessentials.fabric.module.hologram.FabricHologramModule;
 import org.wallentines.midnightlib.config.ConfigProvider;
 import org.wallentines.midnightlib.config.ConfigSection;
-import org.wallentines.midnightlib.config.FileConfig;
 import org.wallentines.midnightlib.config.serialization.json.JsonConfigProvider;
 import org.wallentines.midnightlib.event.Event;
 
@@ -23,7 +21,21 @@ public class MidnightEssentials implements ModInitializer {
     @Override
     public void onInitialize() {
 
-        MidnightEssentialsImpl api = new MidnightEssentialsImpl(new File("config/MidnightEssentials"), new ConfigSection());
+        Registries.MODULE_REGISTRY.register(FabricArmorStandModule.ID, FabricArmorStandModule.MODULE_INFO);
+        Registries.MODULE_REGISTRY.register(FabricBlockCommandModule.ID, FabricBlockCommandModule.MODULE_INFO);
+        Registries.MODULE_REGISTRY.register(FabricSignEditModule.ID, FabricSignEditModule.MODULE_INFO);
+        Registries.MODULE_REGISTRY.register(FabricAutoElytraModule.ID, FabricAutoElytraModule.MODULE_INFO);
+        Registries.MODULE_REGISTRY.register(FabricWaypointModule.ID, FabricWaypointModule.MODULE_INFO);
+        Registries.MODULE_REGISTRY.register(FabricHologramModule.ID, FabricHologramModule.MODULE_INFO);
+
+        ConfigProvider prov = JsonConfigProvider.INSTANCE;
+        ConfigSection lang = prov.loadFromStream(getClass().getResourceAsStream("/midnightessentials/lang/en_us.json"));
+
+        MidnightEssentialsImpl api = new MidnightEssentialsImpl(new File("config/MidnightEssentials"), new ConfigSection(), lang);
+
+        // Load Spanish Entries
+        ConfigSection esp = prov.loadFromStream(getClass().getResourceAsStream("/midnightessentials/lang/es_mx.json"));
+        api.getLangProvider().loadEntries("es_mx", LangRegistry.fromConfigSection(esp));
 
         Event.register(CommandLoadEvent.class, this, event -> {
             LaunchEntityCommand.register(event.getDispatcher());
@@ -33,40 +45,10 @@ public class MidnightEssentials implements ModInitializer {
             DamageCommand.register(event.getDispatcher());
             WarpCommand.register(event.getDispatcher());
             SitCommand.register(event.getDispatcher());
+
+            FabricBlockCommandModule.registerCommands(event.getDispatcher());
         });
 
-        Event.register(MidnightCoreLoadModulesEvent.class, this, event -> {
-
-            event.getModuleRegistry().register(FabricArmorStandModule.ID, FabricArmorStandModule.MODULE_INFO);
-            event.getModuleRegistry().register(FabricBlockCommandModule.ID, FabricBlockCommandModule.MODULE_INFO);
-            event.getModuleRegistry().register(FabricSignEditModule.ID, FabricSignEditModule.MODULE_INFO);
-            event.getModuleRegistry().register(FabricAutoElytraModule.ID, FabricAutoElytraModule.MODULE_INFO);
-            event.getModuleRegistry().register(FabricWaypointModule.ID, FabricWaypointModule.MODULE_INFO);
-            event.getModuleRegistry().register(FabricHologramModule.ID, FabricHologramModule.MODULE_INFO);
-
-        });
-
-        Event.register(MidnightCoreAPICreatedEvent.class, this, event -> {
-
-            ConfigProvider prov = JsonConfigProvider.INSTANCE;
-            ConfigSection lang = prov.loadFromStream(getClass().getResourceAsStream("/midnightessentials/lang/en_us.json"));
-
-            api.initialize(event.getAPI(), lang);
-
-            // Load Spanish Entries
-            ConfigSection esp = prov.loadFromStream(getClass().getResourceAsStream("/midnightessentials/lang/es_mx.json"));
-            FileConfig es = FileConfig.findFile(api.getLangProvider().getFolder().listFiles(), "es_mx");
-            if(es == null) {
-                es = FileConfig.fromFile(new File(api.getLangProvider().getFolder(), "es_mx.json"));
-                es.getRoot().fill(esp);
-                es.save();
-            }
-
-            if(event.getAPI().getModuleManager().isModuleLoaded(FabricBlockCommandModule.ID)) {
-                event.getAPI().getModuleManager().getModule(FabricBlockCommandModule.class).reloadDefaultRegistry();
-            }
-
-        });
 
         PlayerListener.registerEvents();
 

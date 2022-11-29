@@ -17,6 +17,7 @@ import org.wallentines.midnightessentials.common.module.hologram.HologramImpl;
 import org.wallentines.midnightlib.config.ConfigSection;
 import org.wallentines.midnightlib.event.Event;
 import org.wallentines.midnightlib.math.Vec3d;
+import org.wallentines.midnightlib.module.Module;
 import org.wallentines.midnightlib.module.ModuleInfo;
 import org.wallentines.midnightlib.registry.Identifier;
 
@@ -32,7 +33,7 @@ public class FabricHologramModule extends AbstractHologramModule {
     }
 
 
-    public static final ModuleInfo<MidnightCoreAPI> MODULE_INFO = new ModuleInfo<>(FabricHologramModule::new, ID, new ConfigSection());
+    public static final ModuleInfo<MidnightCoreAPI, Module<MidnightCoreAPI>> MODULE_INFO = new ModuleInfo<>(FabricHologramModule::new, ID, new ConfigSection());
 
     @Override
     public boolean initialize(ConfigSection section, MidnightCoreAPI data) {

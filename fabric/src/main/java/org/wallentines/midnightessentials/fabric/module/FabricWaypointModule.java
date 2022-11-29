@@ -536,7 +536,7 @@ public class FabricWaypointModule implements Module<MidnightCoreAPI> {
     }
 
     public static final Identifier ID = new Identifier(Constants.DEFAULT_NAMESPACE, "waypoint");
-    public static final ModuleInfo<MidnightCoreAPI> MODULE_INFO = new ModuleInfo<>(FabricWaypointModule::new, ID, new ConfigSection()
+    public static final ModuleInfo<MidnightCoreAPI, Module<MidnightCoreAPI>> MODULE_INFO = new ModuleInfo<>(FabricWaypointModule::new, ID, new ConfigSection()
             .with("enabled", false)
             .with("waypoint_file", "waypoints")
             .with("base_block", "minecraft:lodestone")

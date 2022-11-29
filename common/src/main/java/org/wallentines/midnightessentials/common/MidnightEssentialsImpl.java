@@ -7,6 +7,7 @@ import org.wallentines.midnightcore.api.module.data.DataProvider;
 import org.wallentines.midnightcore.api.player.Location;
 import org.wallentines.midnightcore.api.player.MPlayer;
 import org.wallentines.midnightcore.api.text.LangProvider;
+import org.wallentines.midnightcore.common.util.FileUtil;
 import org.wallentines.midnightessentials.api.MidnightEssentialsAPI;
 import org.wallentines.midnightessentials.api.config.MainConfig;
 import org.wallentines.midnightlib.config.ConfigSection;
@@ -17,15 +18,25 @@ import java.util.Map;
 
 public class MidnightEssentialsImpl extends MidnightEssentialsAPI {
 
-    private LangProvider langProvider;
+    private final LangProvider langProvider;
     private DataProvider dataProvider;
     private final MainConfig config;
     private final File dataFolder;
 
-    public MidnightEssentialsImpl(File dataFolder, ConfigSection configDefaults) {
+    public MidnightEssentialsImpl(File dataFolder, ConfigSection configDefaults, ConfigSection langDefaults) {
 
         this.dataFolder = dataFolder;
         config = new MainConfig(configDefaults, FileConfig.findOrCreate("config", dataFolder));
+
+        File langFolder = FileUtil.tryCreateDirectory(dataFolder.toPath().resolve("lang"));
+        langProvider = new LangProvider(langFolder.toPath(), langDefaults);
+
+        MidnightCoreAPI.getInstance().getModuleManager().onLoad.register(this, ev -> {
+            if(ev.getModule() instanceof DataModule) {
+                dataProvider = ((DataModule) ev.getModule()).getOrCreateProvider(dataFolder.toPath().resolve("data"));
+            }
+        });
+
     }
 
     @Override
@@ -46,15 +57,6 @@ public class MidnightEssentialsImpl extends MidnightEssentialsAPI {
     @Override
     public DataProvider getDataProvider() {
         return dataProvider;
-    }
-
-    public void initialize(MidnightCoreAPI api, ConfigSection langDefaults) {
-
-        DataModule dMod = api.getModuleManager().getModule(DataModule.class);
-
-        File langFolder = new File(dataFolder, "lang");
-        langProvider = new LangProvider(langFolder.toPath(), langDefaults);
-        dataProvider = dMod.getOrCreateProvider(dataFolder.toPath().resolve("data"));
     }
 
     public void onFirstJoin(MPlayer player) {

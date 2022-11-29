@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class FabricAutoElytraModule implements Module<MidnightCoreAPI> {
 
     public static final Identifier ID = new Identifier("midnightessentials", "auto_elytra");
-    public static final ModuleInfo<MidnightCoreAPI> MODULE_INFO = new ModuleInfo<>(FabricAutoElytraModule::new, ID, new ConfigSection().with("enabled", false));
+    public static final ModuleInfo<MidnightCoreAPI, Module<MidnightCoreAPI>> MODULE_INFO = new ModuleInfo<>(FabricAutoElytraModule::new, ID, new ConfigSection().with("enabled", false));
 
     private final HashMap<FabricPlayer, PlayerItems> playerData = new HashMap<>();
 

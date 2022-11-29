@@ -17,13 +17,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.wallentines.midnightcore.fabric.event.player.PlayerInteractEvent;
 import org.wallentines.midnightlib.config.ConfigSection;
 import org.wallentines.midnightlib.event.Event;
+import org.wallentines.midnightlib.module.Module;
 import org.wallentines.midnightlib.module.ModuleInfo;
 
 import java.util.UUID;
 
 public class FabricSignEditModule extends AbstractSignEditModule {
 
-    public static final ModuleInfo<MidnightCoreAPI> MODULE_INFO = new ModuleInfo<>(FabricSignEditModule::new, ID, new ConfigSection());
+    public static final ModuleInfo<MidnightCoreAPI, Module<MidnightCoreAPI>> MODULE_INFO = new ModuleInfo<>(FabricSignEditModule::new, ID, new ConfigSection());
 
     @Override
     protected void registerListeners() {
